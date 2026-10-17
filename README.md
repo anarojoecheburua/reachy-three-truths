@@ -90,26 +90,52 @@ It also can't go off-script even while we're using it. It has no way to add, dro
 1. Write and approve the script ([`script.md`](script.md)).
 2. Generate each clip with [`tools/generate_voice.py`](tools/generate_voice.py), either through the hosted [Qwen3-TTS Space](https://huggingface.co/spaces/Qwen/Qwen3-TTS) or locally on a Mac with `--local`.
 3. Listen to every clip. If a word comes out wrong, change its spelling *only in the text sent to the model*, then regenerate. For example, "Ana" is Spanish (AH-na), and the model may say "Anna", so we can send "Ahna" instead. The script itself never changes. (In the end Aiden said "Ana" correctly first time, so no respelling was needed.)
-4. Bundle the approved WAVs inside the robot app.
+4. Bundle the approved WAVs inside the robot app ([`three_truths/three_truths/voice/`](three_truths/three_truths/voice/)).
+
+The voice tool gets its own virtual environment, because `qwen-tts` and the Reachy Mini SDK need different versions of some shared libraries:
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install gradio_client          # hosted Space
-.venv/bin/pip install qwen-tts               # optional: run locally
-.venv/bin/python tools/generate_voice.py all            # via the Space
-.venv/bin/python tools/generate_voice.py all --local    # on your own machine
+python3 -m venv .venv-voice
+.venv-voice/bin/pip install gradio_client          # hosted Space
+.venv-voice/bin/pip install qwen-tts               # optional: run locally
+.venv-voice/bin/python tools/generate_voice.py all            # via the Space
+.venv-voice/bin/python tools/generate_voice.py all --local    # on your own machine
 ```
 
 ## How the robot app works
 
-*In progress. This section will be updated as the app is built.*
+*In progress: the game logic is built and tested; the phone remote and antenna trigger come next.*
+
+The app lives in [`three_truths/`](three_truths/). It was scaffolded with Pollen's `reachy-mini-app-assistant`, and [`plan.md`](three_truths/plan.md) tracks its progress.
 
 - **Hardware:** Reachy Mini Wireless, which runs apps on its own Raspberry Pi CM4.
-- **State machine:** an ordered list of steps. The robot starts asleep, wakes up on the first press, plays one clip per press, and goes back to sleep after the goodbye.
+- **State machine** ([`show.py`](three_truths/three_truths/show.py)): the show is a list of 8 clips and four states.
+
+  ```
+  ASLEEP --NEXT--> PLAYING --clip ends--> WAITING --NEXT--> PLAYING ... --goodbye ends--> DONE (asleep)
+  ```
+
+  - Only a button press moves the show forward; nothing happens on a timer.
+  - Presses during a clip are ignored, so a nervous double tap can't skip a line.
+  - REPEAT replays the current clip, BACK plays the previous one, and SKIP TO GOODBYE jumps to the last clip.
+  - STOP always works: it cuts the clip and sends Reachy to sleep. NEXT then carries on from where it stopped.
+
+  This file has no robot code in it, which means every button sequence can be tested on a laptop with a fake robot ([`tests/test_show.py`](three_truths/tests/test_show.py)).
+- **Robot glue** ([`main.py`](three_truths/three_truths/main.py)): connects the state machine to the real robot (wake up, sleep, play a clip, stop a clip). Button presses arrive as web requests and are queued, so only one part of the app ever talks to the motors.
 - **Speech with movement:** clips play through the robot's own speaker while its head "wobbles" in time with the audio, so it looks like it's talking. The WAVs are bundled inside the app, so nothing is streamed from elsewhere.
 - **Sound in a big room:** the robot's 5 W speaker won't fill a hall of 100 people, so on the night a mic near Reachy or a feed into the venue's sound system boosts it.
 - **Phone remote:** a web page served by the robot, with a big NEXT button plus REPEAT, BACK, SKIP TO GOODBYE and STOP.
 - **Backup trigger:** tapping one of Reachy's antennas also counts as NEXT, in case the phone loses connection.
+
+### Running the tests
+
+No robot needed:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install pytest -e three_truths
+cd three_truths && ../.venv/bin/python -m pytest tests
+```
 
 ## About Science Night Glasgow
 

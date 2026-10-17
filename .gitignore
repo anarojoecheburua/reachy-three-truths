@@ -16,3 +16,4 @@ venv/
 
 # Alternative voice takes (not used in the show)
 voice/samples/
+.venv-voice/

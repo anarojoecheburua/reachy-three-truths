@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "three_truths"
+version = "0.1.0"
+description = "A fully scripted Three Truths and a Lie game for Reachy Mini (no LLM, works offline)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "reachy-mini"
+]
+keywords = ["reachy-mini-app"]
+
+[project.entry-points."reachy_mini_apps"]
+three_truths = "three_truths.main:ThreeTruths"
+
+[tool.setuptools]
+package-dir = { "" = "." }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["three_truths*"]
+
+[tool.setuptools.package-data]
+three_truths = ["**/*"] # Also include all non-.py files

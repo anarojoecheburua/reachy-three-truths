@@ -1,11 +1,11 @@
 """Generate Reachy's voice clips from script.md with Qwen3-TTS (Hugging Face Space).
 
 Usage:
-    .venv/bin/python tools/generate_voice.py 01_intro          # one clip
-    .venv/bin/python tools/generate_voice.py 02_round1 03_reveal1  # several clips
-    .venv/bin/python tools/generate_voice.py all               # every clip
-    .venv/bin/python tools/generate_voice.py 01_intro --speaker Ryan --out voice/samples
-    .venv/bin/python tools/generate_voice.py 03_reveal1 --ana Ahna --suffix _ahna --out voice/samples
+    .venv-voice/bin/python tools/generate_voice.py 01_intro          # one clip
+    .venv-voice/bin/python tools/generate_voice.py 02_round1 03_reveal1  # several clips
+    .venv-voice/bin/python tools/generate_voice.py all               # every clip
+    .venv-voice/bin/python tools/generate_voice.py 01_intro --speaker Ryan --out voice/samples
+    .venv-voice/bin/python tools/generate_voice.py 03_reveal1 --ana Ahna --suffix _ahna --out voice/samples
 """
 
 import argparse
@@ -52,7 +52,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("clip", nargs="+", help="clip ids (e.g. 01_intro 02_round1) or 'all'")
     p.add_argument("--speaker", default="Aiden")
-    p.add_argument("--out", default="voice")
+    p.add_argument("--out", default="three_truths/three_truths/voice")
     p.add_argument("--ana", default="Ana", help="TTS spelling of 'Ana' (Ahna = AH-na)")
     p.add_argument("--suffix", default="", help="extra filename suffix, e.g. _ahna")
     p.add_argument("--local", action="store_true", help="run the model on this Mac instead of the Space")

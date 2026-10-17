@@ -1,13 +1,11 @@
 # 🤖 Reachy Mini: Three Truths and a Lie
 
-A fully scripted party game for the [Reachy Mini](https://www.pollen-robotics.com/reachy-mini/) robot, made for a live audience of about 100 people at **Science Night Glasgow** on Tuesday 20 October 2026.
+A fully scripted party game for the [Reachy Mini](https://www.pollen-robotics.com/reachy-mini/) robot, made for a live audience of about 150 people at **Science Night Glasgow** on Tuesday 20 October 2026.
 
 Reachy tells the room four statements. Three are true and one is a lie, and the audience votes for the lie by scanning a QR code before Reachy reveals the answer.
 
 - 🤗 **Install it on your Reachy:** [anarojoecheburua/reachy-three-truths](https://huggingface.co/spaces/anarojoecheburua/reachy-three-truths) on Hugging Face
 - 💻 **Code, tests and this write-up:** you're here
-
-> **Spoiler warning:** the answers are in [`script.md`](script.md). If you're coming to the show, don't peek.
 
 ## 🎲 The game
 
@@ -17,36 +15,21 @@ There are three rounds, each with its own theme:
 2. **About robots:** robotics history and numbers
 3. **About open source:** Linux, Hugging Face and what "open source" actually means
 
-The show is split into 8 audio clips:
-
-| Clip | What Reachy says |
-|---|---|
-| `01_intro` | Says hello and explains the rules and the QR code |
-| `02_round1` | Four statements about itself |
-| `03_reveal1` | Reveals the lie |
-| `04_round2` | Four statements about robots |
-| `05_reveal2` | Reveals the lie |
-| `06_round3` | Four statements about open source |
-| `07_reveal3` | Reveals the lie |
-| `08_goodbye` | Thanks the room, then goes to sleep |
-
-Ana, the presenter, says her cue lines out loud and presses NEXT at the same moment. To the audience it looks like Reachy is listening and replying. It isn't, and that's the whole trick.
-
 ## 🧠 Is the robot using an LLM?
 
-**No. On the night, Reachy doesn't run an LLM or any AI model at all.**
+**No. Reachy doesn't run an LLM.**
 
 This is everything that happens on stage:
 
 1. Ana says her line to the audience and presses **NEXT** on the remote.
-2. The remote sends that button press to the robot over wifi. It sends nothing else, no audio and no text.
-3. The robot plays the next pre-recorded WAV file **through its own speaker**.
-4. While the clip plays, the robot's head moves in time with the sound (the SDK calls this "wobbling"), so it looks like Reachy is talking. Reachy has no mouth, so there's no lip sync, but it moves like a puppet speaking.
+2. The remote sends that button press to the robot over wifi.
+3. The robot answers **through its own speaker**.
+4. While it answers, the robot's head moves in time with the sound, so it looks like Reachy is talking.
 5. The robot goes quiet and waits for the next press.
 
-So the sound really does come from the robot, and the robot really is moving. Every word, though, was written by Ana and recorded in advance. Reachy isn't listening and can't improvise.
+Every word was written by Ana and recorded in advance. Reachy isn't listening and can't improvise.
 
-The only AI in this project is the **voice model**, which was used **once, beforehand**, on a laptop, to turn the approved script into audio files (see [how the voice was made](#%EF%B8%8F-how-the-voice-was-made)). Once a person had listened to and approved those files, the model had done its job, and the robot never touches it.
+The model used in this project is a **text-to-speech (TTS) model**, which turned the approved script into speech **once, beforehand**, on a laptop (see [how the voice was made](#%EF%B8%8F-how-the-voice-was-made)). Once a person had listened to and approved those recordings, the model had done its job, and the robot never touches it.
 
 | | Before the show (on a laptop) | On the night (on the robot) |
 |---|---|---|
@@ -54,6 +37,7 @@ The only AI in this project is the **voice model**, which was used **once, befor
 | AI model | Qwen3-TTS turns the text into speech | **None** |
 | Audio | Generated, listened to, approved | Pre-recorded WAVs, played in order |
 | Microphones | Not used | Not used |
+| Camera | Not used | Off |
 | Internet | Used to download the model | Not needed |
 
 ## 🔒 Why it's deterministic on purpose
@@ -63,6 +47,7 @@ This is a live demo in front of the public, so the robot must **never say anythi
 - **No LLM at runtime.** Nothing generates words on the night.
 - **No live speech generation.** Every line is a WAV file that was made in advance and checked by a person.
 - **No listening to the room.** The microphones stay off, so nobody can heckle the robot into saying something odd.
+- **No camera.** Nothing in the game reacts to what Reachy sees, so the app starts without video. Nobody in the audience is filmed, and the robot's small onboard computer doesn't spend power on video it doesn't need.
 - **No timers.** The show only moves forward when Ana presses a button.
 - **No internet needed.** Venue wifi can be unreliable, so everything runs on the robot itself.
 
@@ -80,11 +65,11 @@ Reachy's voice comes from **[Qwen3-TTS](https://huggingface.co/Qwen/Qwen3-TTS-12
 
 ### Is it an LLM?
 
-Not in the sense people usually mean. An LLM like ChatGPT or Claude generates the words themselves. This model takes the text we give it and reads it out word for word.
+No. It's a transformer, but it isn't an LLM.
 
-Under the hood it's built in a similar way. Like an LLM, it's a transformer that predicts one token after another, except that its tokens are small chunks of sound (about 12 per second of audio). A separate decoder turns those sound tokens back into a waveform. So it's a language-model-style architecture put to work as a voice, with no say over the content.
+LLMs (large language models, the kind of model behind assistants like ChatGPT and Claude) are transformers that generate text. Not every transformer is an LLM, though. Qwen3-TTS is a transformer that predicts one token after another, and its tokens are small chunks of sound (about 12 per second of audio). A separate decoder turns those sound tokens back into a waveform. It takes the text we give it and reads it out word for word, with no say over the content.
 
-Because it samples its output, each run sounds slightly different, a bit like an actor doing another take. That's why we **generate each clip once, listen to it and freeze it as a WAV file**. On the night no model runs at all, and the robot just plays those files back.
+Because it samples its output, each run sounds slightly different, a bit like an actor doing another take. That's why we **generate each clip once, listen to it and freeze it as a WAV file**. On the night no model runs at all. The model was used beforehand to produce a fixed set of recordings, which is what keeps the show deterministic, and the method below is how we generated the voice.
 
 It can't go off-script while we're using it either. It has no way to add, drop or change words, only to choose how to pronounce them, so the worst it can do is mispronounce something. That's why a person checks every clip.
 
@@ -124,7 +109,7 @@ The app lives in [`three_truths/`](three_truths/). It was scaffolded with Pollen
   There's no robot code in this file, which means every button sequence can be tested on a laptop with a fake robot ([`tests/test_show.py`](three_truths/tests/test_show.py)).
 - **Robot glue** ([`main.py`](three_truths/three_truths/main.py)): connects the state machine to the real robot (wake up, sleep, play a clip, stop a clip). Button presses arrive as web requests and wait in a queue, so only one part of the app ever talks to the motors.
 - **Speech with movement:** clips play through the robot's own speaker while its head wobbles in time with the audio. The WAVs ship inside the app, so nothing is streamed from anywhere else.
-- **Sound in a big room:** the robot's 5 W speaker won't fill a hall of 100 people, so on the night a mic near Reachy or a feed into the venue's sound system boosts it.
+- **Sound in a big room:** the robot's 5 W speaker won't fill a hall of 150 people, so on the night a mic near Reachy or a feed into the venue's sound system boosts it.
 - **Remote** ([`static/`](three_truths/three_truths/static/)): a web page served by the robot on port 8042, with a big NEXT button plus BACK, REPEAT, SKIP TO GOODBYE and STOP / SLEEP. It shows the current clip and what NEXT will play next.
   - Buttons that won't do anything right now (NEXT while Reachy is speaking, say) are greyed out.
   - SKIP and STOP need two taps within 2 seconds, so you can't hit them by accident.
@@ -163,10 +148,12 @@ cd three_truths && ../.venv/bin/python -m pytest tests
 
 Science Night Glasgow is a monthly science meet-up in Glasgow, with a different theme every time. Each night runs for about two hours. Doors open with food and drinks, then there's a 90-minute programme of talks, a game and a hands-on demo, and the evening ends with more time to chat.
 
-The first night, **Beyond Human**, covers robotics, brain-computer interfaces, prosthetics and human augmentation, and the ethics of "improving" humans. Nathan Western gives the first talk, Patty O'Callaghan speaks on the ethics of improving humans, and Kirsty Carlyle runs a hands-on demo with bionic and silicone prostheses. Reachy Mini runs the game.
+- 📸 Instagram: [@sciencenightglasgow](https://www.instagram.com/sciencenightglasgow/)
+- 💼 LinkedIn: [linkedin.com/company/science-night-glasgow](https://www.linkedin.com/company/science-night-glasgow)
 
 ## 🙌 Credits
 
 - Robot: [Reachy Mini](https://github.com/pollen-robotics/reachy_mini) by Pollen Robotics and Hugging Face
 - Voice: [Qwen3-TTS](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) by the Qwen team
 - Game and script: Ana ([@anarojoecheburua](https://github.com/anarojoecheburua))
+- The app on Hugging Face: [huggingface.co/spaces/anarojoecheburua/reachy-three-truths](https://huggingface.co/spaces/anarojoecheburua/reachy-three-truths)

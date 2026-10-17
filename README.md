@@ -124,8 +124,21 @@ The app lives in [`three_truths/`](three_truths/). It was scaffolded with Pollen
 - **Robot glue** ([`main.py`](three_truths/three_truths/main.py)): connects the state machine to the real robot (wake up, sleep, play a clip, stop a clip). Button presses arrive as web requests and are queued, so only one part of the app ever talks to the motors.
 - **Speech with movement:** clips play through the robot's own speaker while its head "wobbles" in time with the audio, so it looks like it's talking. The WAVs are bundled inside the app, so nothing is streamed from elsewhere.
 - **Sound in a big room:** the robot's 5 W speaker won't fill a hall of 100 people, so on the night a mic near Reachy or a feed into the venue's sound system boosts it.
-- **Phone remote:** a web page served by the robot, with a big NEXT button plus REPEAT, BACK, SKIP TO GOODBYE and STOP.
+- **Phone remote** ([`static/`](three_truths/three_truths/static/)): a web page served by the robot on port 8042, with a big NEXT button plus BACK, REPEAT, SKIP TO GOODBYE and STOP / SLEEP. It shows the current clip and what NEXT will play.
+  - Buttons that won't do anything right now (for example, NEXT while Reachy is speaking) are greyed out.
+  - SKIP and STOP need two taps within 2 seconds, so they can't be pressed by accident.
+  - The page shows the robot's IP address, because some Android phones can't open `reachy-mini.local` addresses.
+  - The phone only sends button presses. All the decisions are made on the robot.
 - **Backup trigger:** tapping one of Reachy's antennas also counts as NEXT, in case the phone loses connection.
+
+### Rehearsing without the robot
+
+[`tools/rehearse.py`](tools/rehearse.py) runs the real remote and the real state machine on a laptop. It plays the clips through the laptop's speakers and prints what the robot would do, which is handy for practising cue lines:
+
+```bash
+.venv/bin/python tools/rehearse.py           # then open http://localhost:8050
+.venv/bin/python tools/rehearse.py --silent  # buttons only, no sound
+```
 
 ### Running the tests
 

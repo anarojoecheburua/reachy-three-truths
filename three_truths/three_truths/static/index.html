@@ -3,24 +3,38 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Reachy Mini example app template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Three Truths remote</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#0d0f14">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-    <h1>Reachy Mini – Control Panel</h1>
+    <header>
+        <div class="row">
+            <span id="state" class="pill">Connecting…</span>
+            <span id="progress" class="muted"></span>
+        </div>
+        <h1 id="current">Three Truths and a Lie</h1>
+        <p id="upnext" class="muted"></p>
+    </header>
 
-    <div id="controls">
-        <label style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" id="antenna-checkbox" checked>
-            Antennas
-        </label>
+    <main>
+        <button id="next" class="big" data-cmd="next">NEXT</button>
 
-        <button id="sound-btn">Play Sound</button>
-    </div>
+        <div class="grid">
+            <button data-cmd="back">◀ BACK</button>
+            <button data-cmd="repeat">↻ REPEAT</button>
+            <button data-cmd="skip_to_goodbye" data-confirm>SKIP TO GOODBYE</button>
+            <button data-cmd="stop" data-confirm class="danger">STOP / SLEEP</button>
+        </div>
+    </main>
 
-    <div id="status">Antennas status: running</div>
+    <footer class="muted">
+        <span id="conn">●</span>
+        <span id="address"></span>
+    </footer>
+
     <script src="/static/main.js"></script>
 </body>
 

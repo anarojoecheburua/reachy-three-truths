@@ -134,6 +134,6 @@ def test_after_stop_next_resumes_and_repeat_replays(show):
 
 
 def test_every_clip_has_a_wav():
-    from three_truths.main import VOICE_DIR, wav_duration
+    from three_truths.remote import VOICE_DIR, wav_duration
     for clip in CLIPS:
         assert wav_duration(VOICE_DIR / f"{clip}.wav") > 1.0

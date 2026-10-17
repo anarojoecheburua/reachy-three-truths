@@ -1,35 +1,74 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width" />
-	<title> Three Truths </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Three Truths and a Lie</title>
 	<link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 	<div class="hero">
 		<div class="hero-content">
-			<div class="app-icon">🤖⚡</div>
-			<h1> Three Truths </h1>
-			<p class="tagline">Enter your tagline here</p>
+			<div class="app-icon">🤖🤥</div>
+			<h1>Three Truths and a Lie</h1>
+			<p class="tagline">A fully scripted party game for Reachy Mini. No LLM, no improvising, works offline.</p>
 		</div>
 	</div>
 
 	<div class="container">
 		<div class="main-card">
-			<div class="app-preview">
-				<div class="preview-image">
-					<div class="camera-feed">🛠️</div>
+			<div class="app-details">
+				<h2>What it does</h2>
+				<p>
+					Reachy tells the room four statements: about itself, about robots and about open source.
+					Three are true, one is a lie, and the audience votes for the lie. Then Reachy reveals the answer.
+					Built for a live audience at Science Night Glasgow, October 2026.
+				</p>
+
+				<h2>How it works</h2>
+				<div class="steps">
+					<div class="step">
+						<div class="step-number">1</div>
+						<h4>Open the remote</h4>
+						<p>Start the app, then open the robot's address on port 8042 on your phone.</p>
+					</div>
+					<div class="step">
+						<div class="step-number">2</div>
+						<h4>Press NEXT</h4>
+						<p>Reachy wakes up and plays the intro through its own speaker, moving its head as it talks.</p>
+					</div>
+					<div class="step">
+						<div class="step-number">3</div>
+						<h4>Say your line, press again</h4>
+						<p>Each press plays the next of 8 pre-recorded clips. Nothing moves on without you.</p>
+					</div>
+					<div class="step">
+						<div class="step-number">4</div>
+						<h4>Goodbye</h4>
+						<p>After the last clip Reachy goes back to sleep. STOP / SLEEP works at any time.</p>
+					</div>
 				</div>
+
+				<h2>Why no AI on the night?</h2>
+				<p>
+					It's a live show, so Reachy must never go off-script. Every line was written in advance,
+					voiced once with <a href="https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice" target="_blank">Qwen3-TTS</a>
+					(speaker "Aiden"), checked by a person and saved as a WAV file.
+					On the robot there's no LLM, no speech generation, no microphone and no internet: it just plays the clips in order.
+				</p>
+				<p>
+					Full write-up, code and tests:
+					<a href="https://github.com/anarojoecheburua/reachy-three-truths" target="_blank">github.com/anarojoecheburua/reachy-three-truths</a>
+				</p>
 			</div>
 		</div>
 	</div>
 
 	<div class="footer">
 		<p>
-			🤖 Three Truths •
+			🤖 Three Truths and a Lie •
 			<a href="https://github.com/pollen-robotics" target="_blank">Pollen Robotics</a> •
 			<a href="https://huggingface.co/spaces/pollen-robotics/reachy-mini-landing-page#apps" target="_blank">Browse More
 				Apps</a>

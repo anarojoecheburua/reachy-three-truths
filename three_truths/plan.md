@@ -13,7 +13,7 @@ A fully scripted Three Truths and a Lie game for a live audience of ~100 at Scie
 ## Status
 - [x] Scaffold, bundle WAVs, state machine, tests
 - [x] Phone remote page in `static/` and laptop rehearsal mode (`tools/rehearse.py`)
-- [ ] Antenna tap as a backup NEXT (≥ 1.5 s debounce)
+- [ ] Antenna tap as a backup NEXT (≥ 1.5 s debounce), not built yet
 - [ ] Optional idle and emotion moves (pre-cached for offline)
 - [ ] Install on the robot and full dry run with the phone
 

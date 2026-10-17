@@ -89,7 +89,7 @@ It also can't go off-script even while we're using it. It has no way to add, dro
 
 1. Write and approve the script ([`script.md`](script.md)).
 2. Generate each clip with [`tools/generate_voice.py`](tools/generate_voice.py), either through the hosted [Qwen3-TTS Space](https://huggingface.co/spaces/Qwen/Qwen3-TTS) or locally on a Mac with `--local`.
-3. Listen to every clip. If a word comes out wrong, change its spelling *only in the text sent to the model*, then regenerate. For example, "Ana" is Spanish (AH-na), and the model may say "Anna", so we can send "Ahna" instead. The script itself never changes.
+3. Listen to every clip. If a word comes out wrong, change its spelling *only in the text sent to the model*, then regenerate. For example, "Ana" is Spanish (AH-na), and the model may say "Anna", so we can send "Ahna" instead. The script itself never changes. (In the end Aiden said "Ana" correctly first time, so no respelling was needed.)
 4. Bundle the approved WAVs inside the robot app.
 
 ```bash

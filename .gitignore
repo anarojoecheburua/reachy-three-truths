@@ -13,3 +13,6 @@ venv/
 # Secrets and local config
 .env
 *.local
+
+# Alternative voice takes (not used in the show)
+voice/samples/

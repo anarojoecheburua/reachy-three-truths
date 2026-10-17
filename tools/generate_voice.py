@@ -21,7 +21,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "script.md"
 
 # Respellings applied to the TTS text only; script.md stays unchanged.
-# "Ana" is Spanish (AH-na), not "Anna".
+# "Ana" is Spanish (AH-na), not "Anna". Aiden already says it correctly, so no
+# respelling by default; use --ana Ahna if a future take says "Anna".
 RESPELL = {
     r"\bAna\b": "Ana",
 }
@@ -52,7 +53,7 @@ def main():
     p.add_argument("clip", nargs="+", help="clip ids (e.g. 01_intro 02_round1) or 'all'")
     p.add_argument("--speaker", default="Aiden")
     p.add_argument("--out", default="voice")
-    p.add_argument("--ana", default="Ana", help="TTS spelling of 'Ana' (e.g. Ahna)")
+    p.add_argument("--ana", default="Ana", help="TTS spelling of 'Ana' (Ahna = AH-na)")
     p.add_argument("--suffix", default="", help="extra filename suffix, e.g. _ahna")
     p.add_argument("--local", action="store_true", help="run the model on this Mac instead of the Space")
     args = p.parse_args()

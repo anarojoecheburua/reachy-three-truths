@@ -5,7 +5,7 @@ colorFrom: red
 colorTo: blue
 sdk: static
 pinned: false
-short_description: Scripted party game for Reachy Mini. No LLM, works offline.
+short_description: Scripted party game for Reachy Mini
 tags:
  - reachy_mini
  - reachy_mini_python_app
